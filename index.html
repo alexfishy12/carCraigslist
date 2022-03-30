@@ -21,13 +21,13 @@
                 <a class ="nav-link active" href="#">Home</a>
            </li>                
            <li>
-                <a class ="nav-link" href="#">Profile</a>
+                <a class ="nav-link" href="profile.html">Profile</a>
             </li>
             <li>
                 <a class ="nav-link" href="#">List Car</a>
             </li>
         </ul>
-        <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="SignUpModal">
+        <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#SignUpModal">
             Sign Up
         </button>
         <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#test">
@@ -142,15 +142,65 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="test" tabindex="-1">
+    <div class="modal" id="SignUpModal" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
+              <h5 class="modal-title">Create Account</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form action=""></form>
+                <form class="form-control" method="POST" id="createAccount">
+                    <div class="container">
+                    <h1>Register Here</h1>
+                    <p>Please fill in the details to create an account with us.</p>
+                    <hr>
+                    <div>
+                        <label for="firstName"><b>First Name</b></label>
+                        <input type="text" placeholder="Enter first name" name="firstName" id="fName">
+                    </div>
+                    <div>
+                        <label for="lastName"><b>Last Name</b></label>
+                        <input type="text" placeholder="Enter last name" name="lastName" id="lName">
+                    </div>
+                    <div>
+                        <label for="email"><b>Enter Email</b></label>
+                        <input type="text" placeholder="Email Address" name="email" id="email">
+                        
+                    </div>
+                    <div>
+                        <label for="username"><b>Enter Username</b></label>
+                        <input type="text" placeholder="Username" name="username" id="username">
+                    </div>
+                    <div>
+                        <label for="password"><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" name="password" id="password">
+                    </div>
+                    <div>
+                        <label for="address"><b>Address</b></label>
+                        <input type="text" placeholder="Enter address" name="address" id="address">
+                    </div>
+                    <div>
+                        <label for="city"><b>City</b></label>
+                        <input type="text" placeholder="Enter city" name="city" id="city">
+                    </div>
+                    <div>
+                        <label for="state"><b>State</b></label>
+                        <input type="text" placeholder="Enter state" name="state" id="state">
+                    </div>
+                    <div>
+                        <label for="zipcode"><b>Zipcode</b></label>
+                        <input type="text" placeholder="Enter zipcode" name="zipcode" id="zipcode">
+                    </div>
+                    <hr>
+                    
+                    <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+                    <button type="submit" class="registerbtn"><strong>Register</strong></button>
+                    </div>
+                    <div class="container signin">
+                    <p>Already have an account? <a href="#">Sign in</a>.</p>
+                    </div>
+                    </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
