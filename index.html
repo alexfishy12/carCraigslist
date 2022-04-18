@@ -24,7 +24,7 @@
                 <a class ="nav-link" href="profile.html">Profile</a>
             </li>
             <li>
-                <a class ="nav-link" href="#">List Car</a>
+                <a class ="nav-link" data-bs-toggle="modal" data-bs-target="#ListCarModal" href="#">List Car</a>
             </li>
         </ul>
         <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#SignUpModal">
@@ -240,5 +240,61 @@
           </div>
         </div>
       </div>
+      <div class="modal" id="ListCarModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">List a Car</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-control" method="POST" id="logIn">
+                    <div class="container">
+                    <h1>Enter the details for your car</h1>
+                    <hr>
+                    <div class="d-flex flex-row justify-content-between">
+                        <label for="make"><b>Enter Make</b></label>
+                        <input type="text" placeholder="Make" name="make" id="make">
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <label for="model"><b>Enter Model</b></label>
+                        <input type="text" placeholder="Model" name="password" id="password">
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <label for="year"><b>Enter Year</b></label>
+                      <input type="text" placeholder="Year" name="year" id="year">
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <label for="mileage"><b>Enter Mileage</b></label>
+                      <input type="number" placeholder="Mileage" name="mileage" id="mileage">
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <label for="type"><b>Enter Type</b></label>
+                      <input type="text" placeholder="Type" name="type" id="type">
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <label for="color"><b>Enter Color</b></label>
+                      <input type="text" placeholder="Color" name="color" id="color">
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <label for="price"><b>Enter Price</b></label>
+                      <input type="number" placeholder="Price" name="price" id="price">
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                      <label for="formFile" class="form-label">Add Photos</label>
+                      <input class="form-control" type="file" id="formFile">
+                    </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
 </body>
 </html>
