@@ -10,11 +10,17 @@ $(document).ready(function(){
 
 	$("#filter").on("change", function(){
 		filters = getFilters();
+		console.log("filters:");
 		console.log(filters);
 	});
 
 	$("#applyFilters").on("click", function(){
 		filterListings(filters);
+	})
+
+	$("#listCar").submit(function(e){
+		e.preventDefault();
+		console.log("Submitting car listing...");
 	})
 })
 
@@ -50,12 +56,17 @@ function filterListings()
 	//will contain only listings that pass through filter
 	var filteredList = allListings.filter(function(listing)
 	{
-		return 	(filters.type == "" || listing.type == filters.type) &&
-				(filters.make == "" || filters.make == null || listing.make == filters.make) &&
-				(filters.model == "" || filters.model == null || listing.model == filters.model) &&
-				(filters.color == "" || filters.color == null || listing.color == filters.color);
+		return 	(filters.type == "" || filters.type == null || isNaN(filters.type) || listing.type == filters.type) &&
+				(filters.make == "" || filters.make == null || isNaN(filters.make) || listing.make == filters.make) &&
+				(filters.model == "" || filters.model == null || isNaN(filters.model) || listing.model == filters.model) &&
+				(filters.color == "" || filters.color == null || isNaN(filters.color) || listing.color == filters.color) &&
+				(filters.oldestYear == "" || filters.oldestYear == null || isNaN(filters.oldestYear) || filters.oldestYear <= listing.year) &&
+				(filters.newestYear == "" || filters.newestYear == null || isNaN(filters.newestYear) ||  filters.newestYear >= listing.year) &&
+				(filters.minPrice == "" || filters.minPrice == null || isNaN(filters.minPrice) ||  filters.minPrice <= listing.price) &&
+				(filters.maxPrice == "" || filters.maxPrice == null || isNaN(filters.maxPrice) ||  filters.maxPrice >= listing.price) &&
+				(filters.minMileage == "" || filters.minMileage == null || isNaN(filters.minMileage) ||  filters.minMileage <= listing.mileage) &&
+				(filters.maxMileage == "" || filters.maxMileage == null || isNaN(filters.maxMileage) ||  filters.maxMileage >= listing.mileage);
 	});
-
 	buildMenu(filteredList);
 }
 
@@ -67,13 +78,13 @@ function getFilters()
 	var make = $("#filterMake").val();
 	var model = $("#filterModel").val();
 	var color = $("#filterColor").val();
-	var minPrice = $("#filterMinPrice").val();
-	var maxPrice = $("#filterMaxPrice").val();
-	var oldestYear = $("#filterOldest").val();
-	var newestYear = $("#filterNewest").val();
-	var minMileage = $("#filterMinMileage").val();
-	var maxMileage = $("#filterMaxMileage").val();
-	var maxSellerDistance = $("#filterMaxSellerDistance").val();
+	var minPrice = parseInt($("#filterMinPrice").val());
+	var maxPrice = parseInt($("#filterMaxPrice").val());
+	var oldestYear = parseInt($("#filterOldest").val());
+	var newestYear = parseInt($("#filterNewest").val());
+	var minMileage = parseInt($("#filterMinMileage").val());
+	var maxMileage = parseInt($("#filterMaxMileage").val());
+	var maxSellerDistance = parseInt($("#filterMaxSellerDistance").val());
 
 	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage, maxSellerDistance: maxSellerDistance};
 }
@@ -148,7 +159,7 @@ function getListings(){
 }
 
 function tempListings(){
-	const listings = [{lid: 1, uid: 1, price: 9999.99, created: "2022-4-17 12:00", make: "Toyota", model: "Corolla", year: "2010", mileage: "94930", type: "Sedan", color: "Gray"}, {lid: 2, uid: 2, price: 4999.49, created: "2022-4-18 12:00", make: "Honda", model: "Civic", year: "2003", mileage: "150930", type: "Coupe", color: "Blue"}, {lid: 3, uid: 3, price: 14999.99, created: "2022-4-10 12:00", make: "Hyundai", model: "Sonata", year: "2015", mileage: "50930", type: "Sedan", color: "Silver"}];
+	const listings = [{lid: 1, uid: 1, price: 9999.99, created: "2022-4-17 12:00", make: "Toyota", model: "Corolla", year: "2010", mileage: "94930", type: "Sedan", color: "Gray"}, {lid: 2, uid: 2, price: 4999.49, created: "2022-4-18 12:00", make: "Honda", model: "Civic", year: "2003", mileage: "150930", type: "Coupe", color: "Blue"}, {lid: 3, uid: 3, price: 14999.99, created: "2022-4-10 12:00", make: "Hyundai", model: "Sonata", year: "2015", mileage: "50930", type: "Sedan", color: "Silver"}, {lid: 4, uid: 4, price: 19999.99, created: "2022-4-17 12:00", make: "Ford", model: "F-150", year: "2010", mileage: "94930", type: "Truck", color: "Black"}];
 	return listings;
 }
 

@@ -1,9 +1,11 @@
 $(document).ready(function(){
     $("#createAccount").submit(function(e){
+        console.log("Creating account...");
         e.preventDefault();
         getFormDetails();
     })
     $("#login").submit(function(e){
+        console.log("Logging in...");
         e.preventDefault();
         getLoginDetails();
     })
@@ -13,8 +15,8 @@ function getFormDetails(){
     const fName = $("#fName").val();
     const lName = $("#lName").val();
     const email = $("#email").val();
-    const username = $("#username").val();
-    const password = $("#password").val();
+    const username = $("#createusername").val();
+    const password = $("#createpassword").val();
     const address = $("#address").val();
     const city = $("#city").val();
     const state = $("#state").val();
@@ -64,6 +66,7 @@ function createAccount(fn, ln, e, u, p, a, c, s, z){
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log('AJAX Request:' + XMLHttpRequest + "\n");
+            console.log(XMLHttpRequest.responseText);
             console.log('AJAX Status:' + textStatus + "\n");
             console.log('AJAX Error:' + errorThrown + "\n");
             return "Error " . textStatus;
@@ -121,6 +124,7 @@ function login(u, p){
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log('AJAX Request:' + XMLHttpRequest[0] + "\n");
+            console.log(XMLHttpRequest.responseText);
             console.log('AJAX Status:' + textStatus + "\n");
             console.log('AJAX Error:' + errorThrown + "\n");
             return "Error " . textStatus;
