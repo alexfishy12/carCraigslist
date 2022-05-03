@@ -39,8 +39,26 @@ $(document).ready(function(){
 	$("#listCar").submit(function(e){
 		e.preventDefault();
 		console.log("Submitting car listing...");
+		$("#listCarModal").modal("hide");
+		$("#listCar").trigger("reset");
+	})
+
+	$("#sendOffer").submit(function(e){
+		e.preventDefault();
+		getOfferDetails();
+		$("#offerModal").modal('hide');
+        $("#sendOffer").trigger('reset');
 	})
 })
+
+//getOfferDetails from form in offer modal
+function getOfferDetails()
+{
+	var offerlid = $("#offerlid").val();
+	var amount = $("#offerAmount").val();
+
+	saveOffer(offerlid, amount);
+}
 
 //loads listings from database onto page
 function loadListings(base, endpoint, reduced){
@@ -169,8 +187,9 @@ function createListingCard(listing, reduced){
 			"<span>Listing Price: </span><h5 class='card-title text-success'>" + "$" + listing.price.toLocaleString("en-US") + "</h5>" +
 			"<div class='d-flex justify-content-between align-items-center'>" +
 			"<div class='btn-group'>" +
-			"<button type='button' class='btn btn-sm btn-outline-secondary'>Save</button>" +
-			"<button type='button' class='btn btn-sm btn-outline-secondary'>Offer</button>" +
+			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='saveListing(" + listing.lid + ")'>Save</button>" +
+			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='openOfferModal(" + listing.lid + ")>Offer</button>" +
+
 			"</div>"
 		"</div>"
 		"</div>"
@@ -185,6 +204,54 @@ function createListingCard(listing, reduced){
     return card;
 }
 
+//save listing
+function saveListing(lid)
+{
+	var response = $.ajax({
+		url: base + "/saveListing",
+		dataType: "text",
+		type: "POST",
+		data: {lid: lid},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
+}
+
+function openOfferModal(lid)
+{
+	$("#offerModal").modal();
+	$("#offerlid").val(lid);
+}
+
+//save offer to database
+function saveOffer(lid, amount)
+{
+	var response = $.ajax({
+		url: base + "/saveOffer",
+		dataType: "text",
+		type: "POST",
+		data: {lid: lid, offer: amount},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown)
+		{
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
+}
 
 //gets all listings from database
 function getListings(endpoint){
