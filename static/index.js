@@ -2,11 +2,29 @@
 var username;
 var allListings;
 var filters;
+var base = "http://127.0.0.1:5000/";
 
 //when html is done loading
 $(document).ready(function(){
-	allListings = tempListings();
-    buildMenu(allListings);
+	// Check if this base element exists
+	if($("#carMenu").length) {
+		loadListings("#carMenu", "getListings");
+	}
+
+	if($("#yourListings").length) {
+		loadListings("#yourListings", "getMyListings", true);
+	}
+
+	if($("#savedListings").length) {
+		loadListings("#savedListings", "getSavedListings", true);
+	}
+
+	if($("#savedOffers").length) {
+		loadListings("#savedOffers", "getSavedOffers", true);
+	}
+
+	//loadListings("#yourListings");
+    //buildMenu(allListings);
 
 	$("#filter").on("change", function(){
 		filters = getFilters();
@@ -21,31 +39,52 @@ $(document).ready(function(){
 	$("#listCar").submit(function(e){
 		e.preventDefault();
 		console.log("Submitting car listing...");
+		$("#listCarModal").modal("hide");
+		$("#listCar").trigger("reset");
+	})
+
+	$("#sendOffer").submit(function(e){
+		e.preventDefault();
+		getOfferDetails();
+		$("#offerModal").modal('hide');
+        $("#sendOffer").trigger('reset');
 	})
 })
 
+//getOfferDetails from form in offer modal
+function getOfferDetails()
+{
+	var offerlid = $("#offerlid").val();
+	var amount = $("#offerAmount").val();
+
+	saveOffer(offerlid, amount);
+}
+
 //loads listings from database onto page
-function loadListings(){
-    getListings().done(function(response){
-        if(response[0].includes("ERROR"))
+function loadListings(base, endpoint, reduced){
+    getListings(endpoint).done(function(response){
+        if(response.includes("ERROR"))
         {
             console.log("ERROR");
             console.log(response[0]);
         }
         else
         {
-            buildMenu(response);
+            buildMenu(response, base, reduced);
 			allListings = response;
+			console.log(response)
         }
     });
 }
 
 //builds menu of listings in html to display on page
-function buildMenu(listings){
-	$("#carMenu").html("");
+function buildMenu(listings, base, reduced){
+	$(base).html("");
     jQuery.each(listings, function(){
-        var card = createListingCard(this);
-        $("#carMenu").append(card);
+        var card = createListingCard(this, reduced);
+		console.log(card)
+		card = card.replaceAll("img src=undefined", "img src=../static/pictures/car_placeholder.png");
+        $(base).append(card);
     })
 }
 
@@ -90,7 +129,7 @@ function getFilters()
 }
 
 //returns card html for one listing
-function createListingCard(listing){
+function createListingCard(listing, reduced){
     var imgSrc;
     var card = "<div class='col'>" +
         "<div class='card shadow-sm'>";
@@ -119,32 +158,104 @@ function createListingCard(listing){
 				break;
         }
     }
-             
-    card += "<img src=" + imgSrc + " alt='' class='bd-placeholder-img card-img-top' width='100%' height='225'>" + 
+
+	if (reduced){
+
+		card += "<img src=" + imgSrc + " alt='' class='bd-placeholder-img card-img-top' width='100%' height='225'>" +
 			"<div class='card-body'>" +
 				"<h5 class='card-title'>" + listing.year + " " + listing.make + " " + listing.model + "</h5>" +
 				"<h6 class='card-title'>Mileage: " + listing.mileage + "</h6>" +
 				"<p class='card-text'>" +
 					listing.color + " " + listing.type +
 				"</p>" +
-				"<span>Listing Price: </span><h5 class='card-title text-success'>" + listing.price + "</h5>" +
+				"<span>Listing Price: </span><h5 class='card-title text-success'>" + "$" + listing.price.toLocaleString("en-US") + "</h5>" +
 				"<div class='d-flex justify-content-between align-items-center'>" +
-					"<div class='btn-group'>" +
-						"<button type='button' class='btn btn-sm btn-outline-secondary'>Save</button>" +
-						"<button type='button' class='btn btn-sm btn-outline-secondary'>Offer</button>" +
-					"</div>"
 				"</div>"
 			"</div>"
 		"</div>"
 	"</div>";
+	}
+
+	else {
+		card += "<img src=" + imgSrc + " alt='' class='bd-placeholder-img card-img-top' width='100%' height='225'>" +
+			"<div class='card-body'>" +
+			"<h5 class='card-title'>" + listing.year + " " + listing.make + " " + listing.model + "</h5>" +
+			"<h6 class='card-title'>Mileage: " + listing.mileage + "</h6>" +
+			"<p class='card-text'>" +
+			listing.color + " " + listing.type +
+			"</p>" +
+			"<span>Listing Price: </span><h5 class='card-title text-success'>" + "$" + listing.price.toLocaleString("en-US") + "</h5>" +
+			"<div class='d-flex justify-content-between align-items-center'>" +
+			"<div class='btn-group'>" +
+			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='saveListing(" + listing.lid + ")'>Save</button>" +
+			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='openOfferModal(" + listing.lid + ")>Offer</button>" +
+			"</div>"
+		"</div>"
+		"</div>"
+		"</div>"
+		"</div>";
+	}
+
+	if (listing.hasOwnProperty('offer')){
+			card+="<span>Bid: </span><h5 class='card-title text-success'>" + "$" + listing.offer.toLocaleString("en-US") + "</h5>"
+		}
+	
     return card;
 }
 
+//save listing
+function saveListing(lid)
+{
+	var response = $.ajax({
+		url: base + "/saveListing",
+		dataType: "text",
+		type: "POST",
+		data: {lid: lid},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
+}
+
+function openOfferModal(lid)
+{
+	$("#offerModal").modal();
+	$("#offerlid").val(lid);
+}
+
+//save offer to database
+function saveOffer(lid, amount)
+{
+	var response = $.ajax({
+		url: base + "/saveOffer",
+		dataType: "text",
+		type: "POST",
+		data: {lid: lid, offer: amount},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown)
+		{
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
+}
 
 //gets all listings from database
-function getListings(){
+function getListings(endpoint){
     return $.ajax({
-        url: 'getListings.php',
+        url: base + endpoint,
         dataType: 'json',
         type: 'POST',
         success: function(response, status) {
@@ -162,6 +273,7 @@ function tempListings(){
 	const listings = [{lid: 1, uid: 1, price: 9999.99, created: "2022-4-17 12:00", make: "Toyota", model: "Corolla", year: "2010", mileage: "94930", type: "Sedan", color: "Gray"}, {lid: 2, uid: 2, price: 4999.49, created: "2022-4-18 12:00", make: "Honda", model: "Civic", year: "2003", mileage: "150930", type: "Coupe", color: "Blue"}, {lid: 3, uid: 3, price: 14999.99, created: "2022-4-10 12:00", make: "Hyundai", model: "Sonata", year: "2015", mileage: "50930", type: "Sedan", color: "Silver"}, {lid: 4, uid: 4, price: 19999.99, created: "2022-4-17 12:00", make: "Ford", model: "F-150", year: "2010", mileage: "94930", type: "Truck", color: "Black"}];
 	return listings;
 }
+
 
 //use function to get cookie from browser example: getCookie("username") will return stored username if cookie was set during login
 function getCookie(cname) {
