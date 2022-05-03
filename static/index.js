@@ -189,6 +189,7 @@ function createListingCard(listing, reduced){
 			"<div class='btn-group'>" +
 			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='saveListing(" + listing.lid + ")'>Save</button>" +
 			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='openOfferModal(" + listing.lid + ")>Offer</button>" +
+
 			"</div>"
 		"</div>"
 		"</div>"
