@@ -19,6 +19,10 @@ $(document).ready(function(){
 		loadListings("#savedListings", "getSavedListings", true);
 	}
 
+	if($("#savedOffers").length) {
+		loadListings("#savedOffers", "getSavedOffers", true);
+	}
+
 	//loadListings("#yourListings");
     //buildMenu(allListings);
 
@@ -173,6 +177,11 @@ function createListingCard(listing, reduced){
 		"</div>"
 		"</div>";
 	}
+
+	if (listing.hasOwnProperty('offer')){
+			card+="<span>Bid: </span><h5 class='card-title text-success'>" + "$" + listing.offer.toLocaleString("en-US") + "</h5>"
+		}
+	
     return card;
 }
 
