@@ -151,16 +151,16 @@ function createListingCard(listing, reduced, showOffers){
     {
         switch(listing.type){
 			case "Sedan":
-				imgSrc = "'pictures/sedanPlaceholder.jpg'";
+				imgSrc = "'../static/pictures/sedanPlaceholder.jpg'";
 				break;
 			case "Coupe":
-				imgSrc = "'pictures/coupePlaceholder.jpg'";
+				imgSrc = "'../static/pictures/coupePlaceholder.jpg'";
 				break;
 			case "Truck":
-				imgSrc = "'pictures/truckPlaceholder.png'";
+				imgSrc = "'../static/pictures/truckPlaceholder.png'";
 				break;
 			case "Hatchback":
-				imgSrc = "'pictures/hatchbackPlaceholder.png'";
+				imgSrc = "'../static/pictures/hatchbackPlaceholder.png'";
 				break;
         }
     }
