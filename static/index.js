@@ -185,6 +185,117 @@ function createListingCard(listing, reduced){
     return card;
 }
 
+<<<<<<< Updated upstream
+=======
+//open viewOffersModal
+function viewOffersModal(lid)
+{
+	$("#offerList").html();
+	getOffers(lid).done(function(response){
+		var offerList = "";
+		jQuery.each(response, function(){
+			offerList += 	"<div class='row py-1'>" +
+				"<div class='col'> <div class='row'><div class='col text-start'>" + this.name + "</div> <div class='col text-end text-success'>$" + this.amount.toLocaleString('en-us') + "</div> </div> </div>" +
+								"<div class='col btn-group'>" +
+									`<button class='btn btn-sm btn-outline-success' onclick='offerResponse(\"` + this.oid + `\", \"accepted\")'>Accept</button>` +
+									`<button class='btn btn-sm btn-outline-danger' onclick='offerResponse(\"` + this.oid + `\", \"denied\")'>Deny</button>` +
+							"</div></div>";
+		})
+
+		$("#offerList").html(offerList);
+	});
+
+	$("#viewOffersModal").modal("show");
+}
+
+function offerResponse(oid, status)
+{
+	var response = $.ajax({
+		url: base + "/offerResponse",
+		dataType: "text",
+		type: "POST",
+		data: {oid: oid, response: status},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
+}
+
+//save listing
+function saveListing(lid)
+{
+	var response = $.ajax({
+		url: base + "/saveListing",
+		dataType: "text",
+		type: "POST",
+		data: {lid: lid},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
+}
+
+function openOfferModal(lid)
+{
+	$("#offerModal").modal("show");
+	$("#offerlid").val(lid);
+}
+
+//save offer to database
+function saveOffer(lid, amount)
+{
+	var response = $.ajax({
+		url: base + "/saveOffer",
+		dataType: "text",
+		type: "POST",
+		data: {lid: lid, offer: amount},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown)
+		{
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
+}
+
+//gets offers for specific lid
+function getOffers(lid)
+{
+	return $.ajax({
+		url: base + "getOffers",
+		dataType: "json",
+		type: "POST",
+		data: {lid, lid},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+}
+>>>>>>> Stashed changes
 
 //gets all listings from database
 function getListings(endpoint){
