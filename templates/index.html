@@ -217,17 +217,6 @@
                         </select>
                       </div>
                     </div>
-                    <div class="row">
-                      <select class="form-control" id="filterMaxDistance">
-                        <option value="" selected disabled>Seller Distance</option>
-                        <option value="5">&#60;5 miles</option>
-                        <option value="15">&#60;15 miles</option>
-                        <option value="25">&#60;25 miles</option>
-                        <option value="50">&#60;50 miles</option>
-                        <option value="100">&#60;100 miles</option>
-                        <option value="">No Limit</option>
-                      </select>
-                    </div>
                   </div>
                 </div>
                 <button class="btn btn-primary" type="button" id="applyFilters">Apply Filters</button>
@@ -352,7 +341,7 @@
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                       <label for="year"><b>Enter Year</b></label>
-                      <input type="text" placeholder="Year" name="year" id="year">
+                      <input type="number" placeholder="Year" name="year" id="year">
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                       <label for="mileage"><b>Enter Mileage</b></label>
@@ -360,11 +349,29 @@
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                       <label for="type"><b>Enter Type</b></label>
-                      <input type="text" placeholder="Type" name="type" id="type">
+                      <select class="form-control" id="type" aria-describedby="basic-addon1">
+                        <option value="" selected disabled>Type</option>
+                        <option value="">No Preference</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Coupe">Coupe</option>
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="Truck">Truck</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                       <label for="color"><b>Enter Color</b></label>
-                      <input type="text" placeholder="Color" name="color" id="color">
+                      <select class="form-control" form='listCar' id="color">
+                        <option value="" selected disabled>Vehicle Color</option>
+                        <option value="">No Preference</option>
+                        <option value="Black">Black</option>
+                        <option value="White">White</option>
+                        <option value="Gray">Gray</option>
+                        <option value="Red">Red</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Green">Green</option>
+                        <option value="Tan">Tan</option>
+                      </select>
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                       <label for="price"><b>Enter Price</b></label>
