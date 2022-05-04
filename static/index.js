@@ -81,9 +81,15 @@ function loadListings(base, endpoint, reduced, showOffers){
 function buildMenu(listings, base, reduced, showOffers){
 	$(base).html("");
     jQuery.each(listings, function(){
-        var card = createListingCard(this, reduced, showOffers);
+		if (this.sold && base == "#carMenu"){
+			//do not display listing if it is sold and it is being loaded on main page
+		}
+		else
+		{
+			var card = createListingCard(this, reduced, showOffers);
+		}
 		console.log(card)
-		card = card.replaceAll("img src=undefined", "img src=../static/pictures/car_placeholder.png");
+		//card = card.replaceAll("img src=undefined", "img src=../static/pictures/car_placeholder.png");
         $(base).append(card);
     })
 }
@@ -123,9 +129,8 @@ function getFilters()
 	var newestYear = parseInt($("#filterNewest").val());
 	var minMileage = parseInt($("#filterMinMileage").val());
 	var maxMileage = parseInt($("#filterMaxMileage").val());
-	var maxSellerDistance = parseInt($("#filterMaxSellerDistance").val());
 
-	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage, maxSellerDistance: maxSellerDistance};
+	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage};
 }
 
 //returns card html for one listing
@@ -171,9 +176,13 @@ function createListingCard(listing, reduced, showOffers){
 				"<span>Listing Price: </span><h5 class='card-title text-success'>" + "$" + listing.price.toLocaleString("en-US") + "</h5>" +
 				"<div class='d-flex justify-content-between align-items-center'>";
 
-				if(showOffers)
+				if(showOffers && !listing.sold)
 				{
 					card += "<button type='button' class='btn btn-sm btn-outline-secondary' onclick='viewOffersModal(" + listing.lid + ")'>View Offers</button>";
+				}
+				else if (listing.sold)
+				{
+					card += "<div class='badge bg-success'>Sold</div>";
 				}
 				card += "</div>"
 			"</div>"
@@ -190,11 +199,19 @@ function createListingCard(listing, reduced, showOffers){
 			listing.color + " " + listing.type +
 			"</p>" +
 			"<span>Listing Price: </span><h5 class='card-title text-success'>" + "$" + listing.price.toLocaleString("en-US") + "</h5>" +
-			"<div class='d-flex justify-content-between align-items-center'>" +
-			"<div class='btn-group'>" +
-			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='saveListing(" + listing.lid + ")'>Save</button>" +
-			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='openOfferModal(" + listing.lid + ")'>Offer</button>" +
-			"</div>"
+			"<div class='d-flex justify-content-between align-items-center'>";
+			
+			if (listing.sold)
+			{
+				card += "<div class='badge bg-success'>Sold</div>";
+			}
+			else
+			{
+				card += "<div class='btn-group'>" +
+				"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='saveListing(" + listing.lid + ")'>Save</button>" +
+				"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='openOfferModal(" + listing.lid + ")'>Offer</button>" +
+				"</div>"
+			}
 		"</div>"
 		"</div>"
 		"</div>"
@@ -215,13 +232,14 @@ function viewOffersModal(lid)
 	getOffers(lid).done(function(response){
 		var offerList = "";
 		jQuery.each(response, function(){
-
 			offerList += 	"<div class='row py-1'>" +
 				"<div class='col'> <div class='row'><div class='col text-start'>" + this.name + "</div> <div class='col text-end text-success'>$" + this.amount.toLocaleString('en-us') + "</div> </div> </div>" +
 								"<div class='col btn-group'>" +
-									`<button class='btn btn-sm btn-outline-success' onclick='offerResponse(\"` + this.oid + `\", \"accepted\")'>Accept</button>` +
-									`<button class='btn btn-sm btn-outline-danger' onclick='offerResponse(\"` + this.oid + `\", \"denied\")'>Deny</button>` +
+
+									`<button class='btn btn-sm btn-outline-success' onclick='offerResponse(\"` + -1 + `\",` + this.oid + `, \"accepted\")'>Accept</button>` +
+									`<button class='btn btn-sm btn-outline-danger' onclick='offerResponse(\"` + this.lid + `\",` + this.oid + `, \"denied\")'>Deny</button>` +
 							"</div></div>";
+
 		})
 
 		$("#offerList").html(offerList);
@@ -230,7 +248,7 @@ function viewOffersModal(lid)
 	$("#viewOffersModal").modal("show");
 }
 
-function offerResponse(oid, status)
+function offerResponse(lid, oid, status)
 {
 	var response = $.ajax({
 		url: base + "/offerResponse",
@@ -248,6 +266,15 @@ function offerResponse(oid, status)
 	});
 
 	console.log(response);
+	if (lid == -1)
+	{
+		$("#viewOffersModal").modal("hide");
+		location.reload()
+	}
+	else
+	{
+		viewOffersModal(lid);
+	}
 }
 
 //save listing
