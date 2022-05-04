@@ -330,7 +330,7 @@
           </div>
         </div>
       </div>
-      <div class="modal" id="ListCarModal" tabindex="-1">
+      <div class="modal" id="listCarModal" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -381,6 +381,29 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary" form="listCar">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal" id="offerModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Send Offer</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-control" method="POST" id="sendOffer">
+                    <div class="d-flex flex-row justify-content-between">
+                        <label for="amount"><b>Enter amount</b></label>
+                        <input type="number" placeholder="0.00" name="amount" id="offerAmount">
+                        <input type="number" value="" id="offerlid" hidden>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" form="sendOffer">Submit</button>
             </div>
           </div>
         </div>
