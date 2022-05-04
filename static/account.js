@@ -37,6 +37,7 @@ function getCarDetails(){
         var photo;
         if (fileForm.files.length > 0)
         {
+            var file = fileForm.files[0];
             console.log(await toBase64(file));
             photo = await toBase64(file);
         }
