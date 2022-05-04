@@ -269,7 +269,7 @@ function offerResponse(lid, oid, status)
 	if (lid == -1)
 	{
 		$("#viewOffersModal").modal("hide");
-		location.reload()
+		location.reload();
 	}
 	else
 	{
