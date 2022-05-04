@@ -123,9 +123,8 @@ function getFilters()
 	var newestYear = parseInt($("#filterNewest").val());
 	var minMileage = parseInt($("#filterMinMileage").val());
 	var maxMileage = parseInt($("#filterMaxMileage").val());
-	var maxSellerDistance = parseInt($("#filterMaxSellerDistance").val());
 
-	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage, maxSellerDistance: maxSellerDistance};
+	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage};
 }
 
 //returns card html for one listing
