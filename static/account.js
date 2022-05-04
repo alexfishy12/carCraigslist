@@ -24,21 +24,33 @@ function getCarDetails(){
     const type = $("#type").val();
     const color = $("#color").val();
     const price = $("#price").val();
-
-
-    listCar(make, model, year, mileage, type, color, price).done(function(response){
-        if (response.includes("ERROR"))
-        {
-            $('#createMessage').show();
-            $('#createMessage').text(response);
-        }
-        else
-        {
-            console.log("Listed!")
-
-            sleep(2000).then(() => goHome());
-        }
+    
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
     });
+    
+    async function Main() {
+        const file = document.querySelector('#formFile').files[0];
+        console.log(await toBase64(file));
+        listCar(make, model, year, mileage, type, color, price, await toBase64(file)).done(function(response){
+            if (response.includes("ERROR"))
+            {
+                $('#createMessage').show();
+                $('#createMessage').text(response);
+            }
+            else
+            {
+                console.log("Listed!")
+
+                sleep(2000).then(() => goHome());
+            }
+        });
+    } 
+
+    Main();
 }
 
 function getFormDetails(){
@@ -163,7 +175,7 @@ function login(u, p){
     });
 }
 
-function listCar(make, model, year, mileage, type, color, price){
+function listCar(make, model, year, mileage, type, color, price, img){
     console.log('createListing function executing...');
     //use jQuery PLEASE
     return $.ajax({
@@ -171,7 +183,7 @@ function listCar(make, model, year, mileage, type, color, price){
         url: base + 'createListing',
         dataType: 'text',
         type: 'POST',
-        data: {make: make, model: model, year: year, mileage: mileage, type: type, color: color, price: price},
+        data: {make: make, model: model, year: year, mileage: mileage, type: type, color: color, price: price, img: img},
         success: function (response, status) {
             console.log('AJAX Success.');
             return response;
