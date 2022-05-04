@@ -12,7 +12,7 @@ $(document).ready(function(){
 	}
 
 	if($("#yourListings").length) {
-		loadListings("#yourListings", "getMyListings", true);
+		loadListings("#yourListings", "getMyListings", true, true);
 	}
 
 	if($("#savedListings").length) {
@@ -61,7 +61,7 @@ function getOfferDetails()
 }
 
 //loads listings from database onto page
-function loadListings(base, endpoint, reduced){
+function loadListings(base, endpoint, reduced, showOffers){
     getListings(endpoint).done(function(response){
         if(response.includes("ERROR"))
         {
@@ -70,7 +70,7 @@ function loadListings(base, endpoint, reduced){
         }
         else
         {
-            buildMenu(response, base, reduced);
+            buildMenu(response, base, reduced, showOffers);
 			allListings = response;
 			console.log(response)
         }
@@ -78,10 +78,10 @@ function loadListings(base, endpoint, reduced){
 }
 
 //builds menu of listings in html to display on page
-function buildMenu(listings, base, reduced){
+function buildMenu(listings, base, reduced, showOffers){
 	$(base).html("");
     jQuery.each(listings, function(){
-        var card = createListingCard(this, reduced);
+        var card = createListingCard(this, reduced, showOffers);
 		console.log(card)
 		card = card.replaceAll("img src=undefined", "img src=../static/pictures/car_placeholder.png");
         $(base).append(card);
@@ -129,7 +129,7 @@ function getFilters()
 }
 
 //returns card html for one listing
-function createListingCard(listing, reduced){
+function createListingCard(listing, reduced, showOffers){
     var imgSrc;
     var card = "<div class='col'>" +
         "<div class='card shadow-sm'>";
@@ -169,8 +169,13 @@ function createListingCard(listing, reduced){
 					listing.color + " " + listing.type +
 				"</p>" +
 				"<span>Listing Price: </span><h5 class='card-title text-success'>" + "$" + listing.price.toLocaleString("en-US") + "</h5>" +
-				"<div class='d-flex justify-content-between align-items-center'>" +
-				"</div>"
+				"<div class='d-flex justify-content-between align-items-center'>";
+
+				if(showOffers)
+				{
+					card += "<button type='button' class='btn btn-sm btn-outline-secondary' onclick='viewOffersModal(" + listing.lid + ")'>View Offers</button>";
+				}
+				card += "</div>"
 			"</div>"
 		"</div>"
 	"</div>";
@@ -188,8 +193,7 @@ function createListingCard(listing, reduced){
 			"<div class='d-flex justify-content-between align-items-center'>" +
 			"<div class='btn-group'>" +
 			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='saveListing(" + listing.lid + ")'>Save</button>" +
-			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='openOfferModal(" + listing.lid + ")>Offer</button>" +
-
+			"<button type='button' class='btn btn-sm btn-outline-secondary' onclick='openOfferModal(" + listing.lid + ")'>Offer</button>" +
 			"</div>"
 		"</div>"
 		"</div>"
@@ -202,6 +206,47 @@ function createListingCard(listing, reduced){
 		}
 	
     return card;
+}
+
+//open viewOffersModal
+function viewOffersModal(lid)
+{
+	$("#offerList").html();
+	getOffers(lid).done(function(response){
+		var offerList = "";
+		jQuery.each(response, function(){
+			offerList += 	"<div class='d-flex flex-row justify-content-between'>" +
+								"<div class='flex-col'>" + this.name + ": " + this.amount + "</div>" +
+								"<div class='flex-col'>" +
+									"<button class='btn btn-sm btn-success' onclick='offerResponse(" + this.oid + ", \'accepted\')'>Accept</button>" +
+									"<button class='btn btn-sm btn-success' onclick='offerResponse(" + this.oid + ", \'denied\')'>Deny</button>" +
+							"</div>";
+		})
+
+		$("#offerList").html(offerList);
+	});
+
+	$("#viewOffersModal").modal("show");
+}
+
+function offerResponse(oid, status)
+{
+	var response = $.ajax({
+		url: base + "/offerResponse",
+		dataType: "text",
+		type: "POST",
+		data: {oid: oid, response: status},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
+
+	console.log(response);
 }
 
 //save listing
@@ -227,7 +272,7 @@ function saveListing(lid)
 
 function openOfferModal(lid)
 {
-	$("#offerModal").modal();
+	$("#offerModal").modal("show");
 	$("#offerlid").val(lid);
 }
 
@@ -251,6 +296,25 @@ function saveOffer(lid, amount)
 	});
 
 	console.log(response);
+}
+
+//gets offers for specific lid
+function getOffers(lid)
+{
+	return $.ajax({
+		url: base + "/getOffers",
+		dataType: "text",
+		type: "POST",
+		data: {lid, lid},
+		success: function(response, status) {
+			console.log("AJAX Success.");
+			return response;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log("AJAX Error.");
+			return XMLHttpRequest.responseText;
+		}
+	});
 }
 
 //gets all listings from database
