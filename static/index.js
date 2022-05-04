@@ -232,22 +232,14 @@ function viewOffersModal(lid)
 	getOffers(lid).done(function(response){
 		var offerList = "";
 		jQuery.each(response, function(){
-<<<<<<< Updated upstream
-			offerList += 	"<div class='d-flex flex-row justify-content-between'>" +
-								"<div class='flex-col'>" + this.name + ": " + this.amount + "</div>" +
-								"<div class='flex-col'>" +
-									"<button class='btn btn-sm btn-success' onclick='offerResponse(" + this.oid + ", \'accepted\')'>Accept</button>" +
-									"<button class='btn btn-sm btn-success' onclick='offerResponse(" + this.oid + ", \'denied\')'>Deny</button>" +
-							"</div>";
-=======
-
 			offerList += 	"<div class='row py-1'>" +
 				"<div class='col'> <div class='row'><div class='col text-start'>" + this.name + "</div> <div class='col text-end text-success'>$" + this.amount.toLocaleString('en-us') + "</div> </div> </div>" +
 								"<div class='col btn-group'>" +
+
 									`<button class='btn btn-sm btn-outline-success' onclick='offerResponse(\"` + -1 + `\",` + this.oid + `, \"accepted\")'>Accept</button>` +
 									`<button class='btn btn-sm btn-outline-danger' onclick='offerResponse(\"` + this.lid + `\",` + this.oid + `, \"denied\")'>Deny</button>` +
 							"</div></div>";
->>>>>>> Stashed changes
+
 		})
 
 		$("#offerList").html(offerList);
@@ -337,8 +329,8 @@ function saveOffer(lid, amount)
 function getOffers(lid)
 {
 	return $.ajax({
-		url: base + "/getOffers",
-		dataType: "text",
+		url: base + "getOffers",
+		dataType: "json",
 		type: "POST",
 		data: {lid, lid},
 		success: function(response, status) {
