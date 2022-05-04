@@ -16,7 +16,7 @@
 
 <body class="bg-light px-lg-5">
     <div class="navbar navbar-expand-lg navbar-Light bg-white flex-column flex-md-row px-3">
-        <a href="#" class="navbar-brand">CarCraigslist</a>
+        <a href="#" class="navbar-brand">Car Craigslist</a>
         <ul class="navbar-nav me-auto">
             <li class="nav-item">
                 <a class ="nav-link active" href="#">Home</a>
@@ -347,11 +347,16 @@
                       <label for="mileage"><b>Enter Mileage</b></label>
                       <input type="number" placeholder="Mileage" name="mileage" id="mileage">
                     </div>
+
                     <div class="d-flex flex-row justify-content-between">
+                      <label for="price"><b>Enter Price</b></label>
+                      <input type="number" placeholder="Price" name="price" id="price">
+                    </div>
+
+                        <div class="d-flex flex-row justify-content-between">
                       <label for="type"><b>Enter Type</b></label>
-                      <select class="form-control" id="type" aria-describedby="basic-addon1">
+                      <select id="type" aria-describedby="basic-addon1">
                         <option value="" selected disabled>Type</option>
-                        <option value="">No Preference</option>
                         <option value="Sedan">Sedan</option>
                         <option value="Coupe">Coupe</option>
                         <option value="Hatchback">Hatchback</option>
@@ -361,9 +366,8 @@
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                       <label for="color"><b>Enter Color</b></label>
-                      <select class="" form='listCar' id="color">
+                      <select form='listCar' id="color">
                         <option value="" selected disabled>Vehicle Color</option>
-                        <option value="">No Preference</option>
                         <option value="Black">Black</option>
                         <option value="White">White</option>
                         <option value="Gray">Gray</option>
@@ -373,14 +377,10 @@
                         <option value="Tan">Tan</option>
                       </select>
                     </div>
-                    <div class="d-flex flex-row justify-content-between">
-                      <label for="price"><b>Enter Price</b></label>
-                      <input type="number" placeholder="Price" name="price" id="price">
-                    </div>
                     <hr>
                     <div class="mb-3">
                       <label for="formFile" class="form-label">Add Photos</label>
-                      <input class="form-control" type="file" accept="image/png, image/gif, image/jpeg" id="formFile">
+                      <input class="form-control" type="file" id="formFile">
                     </div>
                     </div>
                 </form>
