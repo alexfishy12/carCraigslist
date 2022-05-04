@@ -88,7 +88,8 @@ function buildMenu(listings, base, reduced, showOffers){
 		{
 			var card = createListingCard(this, reduced, showOffers);
 		}
-		console.log(card)
+
+		//console.log(card)
 		//card = card.replaceAll("img src=undefined", "img src=../static/pictures/car_placeholder.png");
         $(base).append(card);
     })
@@ -101,10 +102,10 @@ function filterListings()
 	//will contain only listings that pass through filter
 	var filteredList = allListings.filter(function(listing)
 	{
-		return 	(filters.type == "" || filters.type == null || isNaN(filters.type) || listing.type == filters.type) &&
-				(filters.make == "" || filters.make == null || isNaN(filters.make) || listing.make == filters.make) &&
-				(filters.model == "" || filters.model == null || isNaN(filters.model) || listing.model == filters.model) &&
-				(filters.color == "" || filters.color == null || isNaN(filters.color) || listing.color == filters.color) &&
+		return 	(filters.type == "" || filters.type == null || listing.type == filters.type) &&
+				(filters.make == "" || filters.make == null || listing.make == filters.make) &&
+				(filters.model == "" || filters.model == null || listing.model == filters.model) &&
+				(filters.color == "" || filters.color == null || listing.color == filters.color) &&
 				(filters.oldestYear == "" || filters.oldestYear == null || isNaN(filters.oldestYear) || filters.oldestYear <= listing.year) &&
 				(filters.newestYear == "" || filters.newestYear == null || isNaN(filters.newestYear) ||  filters.newestYear >= listing.year) &&
 				(filters.minPrice == "" || filters.minPrice == null || isNaN(filters.minPrice) ||  filters.minPrice <= listing.price) &&
@@ -112,7 +113,7 @@ function filterListings()
 				(filters.minMileage == "" || filters.minMileage == null || isNaN(filters.minMileage) ||  filters.minMileage <= listing.mileage) &&
 				(filters.maxMileage == "" || filters.maxMileage == null || isNaN(filters.maxMileage) ||  filters.maxMileage >= listing.mileage);
 	});
-	buildMenu(filteredList);
+	buildMenu(filteredList, "#carMenu", false, false);
 }
 
 //takes form data from filter form
@@ -129,9 +130,8 @@ function getFilters()
 	var newestYear = parseInt($("#filterNewest").val());
 	var minMileage = parseInt($("#filterMinMileage").val());
 	var maxMileage = parseInt($("#filterMaxMileage").val());
-	var maxSellerDistance = parseInt($("#filterMaxSellerDistance").val());
 
-	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage, maxSellerDistance: maxSellerDistance};
+	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage};
 }
 
 //returns card html for one listing
