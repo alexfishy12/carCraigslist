@@ -89,7 +89,7 @@ function buildMenu(listings, base, reduced, showOffers){
 			var card = createListingCard(this, reduced, showOffers);
 		}
 		console.log(card)
-		card = card.replaceAll("img src=undefined", "img src=../static/pictures/car_placeholder.png");
+		//card = card.replaceAll("img src=undefined", "img src=../static/pictures/car_placeholder.png");
         $(base).append(card);
     })
 }
@@ -180,7 +180,7 @@ function createListingCard(listing, reduced, showOffers){
 				{
 					card += "<button type='button' class='btn btn-sm btn-outline-secondary' onclick='viewOffersModal(" + listing.lid + ")'>View Offers</button>";
 				}
-				else
+				else if (listing.sold)
 				{
 					card += "<div class='badge bg-success'>Sold</div>";
 				}
@@ -269,6 +269,7 @@ function offerResponse(lid, oid, status)
 	if (lid == -1)
 	{
 		$("#viewOffersModal").modal("hide");
+		location.reload();
 	}
 	else
 	{
