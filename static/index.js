@@ -81,7 +81,7 @@ function loadListings(base, endpoint, reduced, showOffers){
 function buildMenu(listings, base, reduced, showOffers){
 	$(base).html("");
     jQuery.each(listings, function(){
-		if (this.sold && base == "#carMenu"){
+		if (this.sold  == 1 && base == "#carMenu"){
 			//do not display listing if it is sold and it is being loaded on main page
 		}
 		else
@@ -129,8 +129,9 @@ function getFilters()
 	var newestYear = parseInt($("#filterNewest").val());
 	var minMileage = parseInt($("#filterMinMileage").val());
 	var maxMileage = parseInt($("#filterMaxMileage").val());
+	var maxSellerDistance = parseInt($("#filterMaxSellerDistance").val());
 
-	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage};
+	return {type: type, make: make, model: model, color: color, minPrice: minPrice, maxPrice: maxPrice, oldestYear: oldestYear, newestYear: newestYear, minMileage: minMileage, maxMileage: maxMileage, maxSellerDistance: maxSellerDistance};
 }
 
 //returns card html for one listing
@@ -139,9 +140,9 @@ function createListingCard(listing, reduced, showOffers){
     var card = "<div class='col'>" +
         "<div class='card shadow-sm'>";
         
-    if (listing.photo)
+    if (listing.photo && listing.photo != "null" && listing.photo != null)
     {
-        //decode photo from blob
+        //decode photo from base64
         var decodedImg = listing.photo //decode()
         
         imgSrc = decodedImg;
@@ -180,7 +181,7 @@ function createListingCard(listing, reduced, showOffers){
 				{
 					card += "<button type='button' class='btn btn-sm btn-outline-secondary' onclick='viewOffersModal(" + listing.lid + ")'>View Offers</button>";
 				}
-				else
+				else if (listing.sold)
 				{
 					card += "<div class='badge bg-success'>Sold</div>";
 				}
@@ -232,14 +233,13 @@ function viewOffersModal(lid)
 	getOffers(lid).done(function(response){
 		var offerList = "";
 		jQuery.each(response, function(){
+
 			offerList += 	"<div class='row py-1'>" +
 				"<div class='col'> <div class='row'><div class='col text-start'>" + this.name + "</div> <div class='col text-end text-success'>$" + this.amount.toLocaleString('en-us') + "</div> </div> </div>" +
 								"<div class='col btn-group'>" +
-
 									`<button class='btn btn-sm btn-outline-success' onclick='offerResponse(\"` + -1 + `\",` + this.oid + `, \"accepted\")'>Accept</button>` +
 									`<button class='btn btn-sm btn-outline-danger' onclick='offerResponse(\"` + this.lid + `\",` + this.oid + `, \"denied\")'>Deny</button>` +
 							"</div></div>";
-
 		})
 
 		$("#offerList").html(offerList);

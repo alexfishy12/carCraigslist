@@ -33,9 +33,18 @@ function getCarDetails(){
     });
     
     async function Main() {
-        const file = document.querySelector('#formFile').files[0];
-        console.log(await toBase64(file));
-        listCar(make, model, year, mileage, type, color, price, await toBase64(file)).done(function(response){
+        const fileForm = document.querySelector('#formFile');
+        var photo;
+        if (fileForm.files.length > 0)
+        {
+            console.log(await toBase64(file));
+            photo = await toBase64(file);
+        }
+        else
+        {
+            photo = null;
+        }
+        listCar(make, model, year, mileage, type, color, price, photo).done(function(response){
             if (response.includes("ERROR"))
             {
                 $('#createMessage').show();
